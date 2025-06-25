@@ -12,8 +12,8 @@
  * constant variables will be used throughout code for consistency
  * - Whenever value/suit is changed, it must be within the valid values
  *
- * @author ???
- * @version ???
+ * @author Ramysannta
+ * @version 1.0
  */
 
 /*
@@ -23,12 +23,12 @@
  * -------------------------------------------------------
  * - value : int
  * - suit : char
- * + HEART : char			//static constant with value ♥
- * + DIAMOND : char			//static constant with value ♦
- * + CLUB : char			//static constant with value ♣
- * + SPADE : char			//static constant with value ♠
- * + DEFAULT_VALUE : int	//static constant with value 1
- * + DEFAULT_SUIT : char	//static constant with value ♥
+ * + HEART : char            //static constant with value ♥
+ * + DIAMOND : char          //static constant with value ♦
+ * + CLUB : char             //static constant with value ♣
+ * + SPADE : char            //static constant with value ♠
+ * + DEFAULT_VALUE : int     //static constant with value 1
+ * + DEFAULT_SUIT : char     //static constant with value ♥
  * -------------------------------------------------------
  * + Card()
  * + Card(value : int, suit : char)
@@ -48,134 +48,196 @@
 
 public class Card {
 
-	/*** CONSTANT VARIABLES ***/
+    /*** CONSTANT VARIABLES ***/
+    public static final char HEART = '\u2665';    // ♥
+    public static final char DIAMOND = '\u2666';  // ♦
+    public static final char CLUB = '\u2663';     // ♣
+    public static final char SPADE = '\u2660';    // ♠
+    public static final int DEFAULT_VALUE = 1;
+    public static final char DEFAULT_SUIT = HEART;
 
+    /*** INSTANCE VARIABLES ***/
+    private int value;
+    private char suit;
 
-	/*** INSTANCE VARIABLES ***/
+    /*** CONSTRUCTOR METHODS ***/
 
+    /**
+     * Default constructor, builds default card object as: A ♥
+     */
+    public Card() {
+        this.value = DEFAULT_VALUE;
+        this.suit = DEFAULT_SUIT;
+    }
 
-	/*** CONSTRUCTOR METHODS ***/
-	/**
-	 * Default constructor, builds default card object as: A ♥
-	 */
+    /**
+     * Full constructor builds object with all data for instance variables provided.
+     * If arguments are not valid, program shuts down with error message
+     *
+     * @param value numerical value of card (1-13), not what shows on card (A, 2-10,
+     *              J, Q, K)
+     * @param suit  one of four suit values (unicode value for heart, diamond,
+     *              spade, or club)
+     */
+    public Card(int value, char suit) {
+        if (!setAll(value, suit)) {
+            System.out.println("ERROR: Invalid full constructor args. Exiting...");
+            System.exit(0);
+        }
+    }
 
+    /**
+     * Copy constructor builds object with all data from Card object provided. No
+     * changes made to original object, no shallow copying
+     *
+     * @param original Card object to be copied
+     */
+    public Card(Card original) {
+        if (original == null) {
+            System.out.println("ERROR: Copy constructor received null. Exiting...");
+            System.exit(0);
+        }
+        this.value = original.value;
+        this.suit = original.suit;
+    }
 
-	/**
-	 * Full constructor builds object with all data for instance variables provided.
-	 * If arguments are not valid, program shuts down with error message
-	 *
-	 * @param value numerical value of card (1-13), not what shows on card (A, 2-10,
-	 *              J, Q, K)
-	 * @param suit  one of four suit values (unicode value for heart, diamond,
-	 *              spade, or club)
-	 */
+    /*** MUTATOR METHODS (SETTERS) ***/
 
+    /**
+     * Sets value for card only if valid, otherwise will not change instance
+     * variable. Returns boolean representing whether error occurred (false) or
+     * operation completed successfully (true)
+     *
+     * @param value numerical value of card (1-13), not what shows on card (A, 2-10,
+     *              J, Q, K)
+     *
+     * @return true if card value is between 1 and 13 (inclusive), false otherwise
+     */
+    public boolean setValue(int value) {
+        if (value >= 1 && value <= 13) {
+            this.value = value;
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Copy constructor builds object with all data from Card object provided. No
-	 * changes made to original object, no shallow copying
-	 *
-	 * @param original Card object to be copied
-	 */
+    /**
+     * Sets suit for card only if valid, otherwise will not change instance
+     * variable. Returns boolean representing whether error occurred (false) or
+     * operation completed successfully (true)
+     *
+     * @param suit one of four suit values (unicode value for heart, diamond, club or spade)
+     *
+     * @return true if card suit is unicode value for heart, diamond, club or spade.
+     *         false otherwise
+     */
+    public boolean setSuit(char suit) {
+        if (suit == HEART || suit == DIAMOND || suit == CLUB || suit == SPADE) {
+            this.suit = suit;
+            return true;
+        }
+        return false;
+    }
 
+    /**
+     * Sets suit and value for card only if valid, returns boolean representing
+     * whether error occurred (false) or operation completed successfully (true)
+     *
+     * @param value numerical value of card (1-13)
+     * @param suit one of four suit values (unicode)
+     * @return true if both value and suit are valid
+     */
+    public boolean setAll(int value, char suit) {
+        return setValue(value) && setSuit(suit);
+    }
 
-	/*** MUTATOR METHODS (SETTERS) ***/
-	/**
-	 * Sets value for card only if valid, otherwise will not change instance
-	 * variable. Returns boolean representing whether error occured (false) or
-	 * operation completed successfully (true)
-	 *
-	 * @param value numerical value of card (1-13), not what shows on card (A, 2-10,
-	 *              J, Q, K)
-	 *
-	 * @return true if card value is between 1 and 13 (inclusive), false otherwise
-	 */
+    /*** ACCESSOR METHODS (GETTERS) ***/
 
+    /**
+     * Access unicode character representing suit of card
+     *
+     * @return suit as unicode character for heart, spade, diamond, or club
+     */
+    public char getSuit() {
+        return suit;
+    }
 
-	/**
-	 * Sets suit for card only if valid, otherwise will not change instance
-	 * variable. Returns boolean representing whether error occured (false) or
-	 * operation completed successfully (true)
-	 *
-	 * @param suit one of four suit values (unicode value for heart, diamond, spade,
-	 *             or club)
-	 *
-	 * @return true if card suit is unicode value for heart, diamond, club or spade.
-	 *         false otherwise
-	 */
+    /**
+     * Access numerical value of card (1-13)
+     *
+     * @return value as raw integer 1-13 (not what player sees as A, 2-10, J, Q, K;
+     *         see {@link #getPrintValue()})
+     */
+    public int getValue() {
+        return value;
+    }
 
+    /**
+     * Access value of card as seen by user (A, 2-10, J, Q, K) that would be printed
+     * on card
+     *
+     * @return value as String user sees on card (A, 2-10, J, Q, K), not numerical
+     *         value 1-13
+     */
+    public String getPrintValue() {
+        switch (value) {
+            case 1: return "A";
+            case 11: return "J";
+            case 12: return "Q";
+            case 13: return "K";
+            default: return String.valueOf(value);
+        }
+    }
 
-	/**
-	 * Sets suit and value for card only if valid, returns boolean representing
-	 * whether error occured (false) or operation completed successfully (true)
-	 *
-	 * @param suit  one of four suit values (unicode value for heart, diamond,
-	 *              spade, or club)
-	 * @param value numerical value of card (1-13), not what shows on card (A, 2-10,
-	 *              J, Q, K)
-	 *
-	 * @return true if card suit AND value are valid, false otherwise
-	 */
+    /**
+     * Access ASCII art version of card data, each line separated by newline
+     * character, no newline character at end of String
+     *
+     * @return String containing ASCII art with card suit and card print value
+     */
+    public String getPrintCard() {
+        String val = getPrintValue();
+        if (val.length() == 1) val = " " + val + " ";
+        return  "-------\n" +
+                "|" + suit + "   " + suit + "|\n" +
+                "| " + val + "|\n" +
+                "|" + suit + "   " + suit + "|\n" +
+                "-------";
+    }
 
+    /*** OTHER REQUIRED METHODS ***/
 
-	/*** ACCESSOR METHODS (GETTERS) ***/
-	/**
-	 * Access unicode character representing suit of card
-	 *
-	 * @return suit as unicode character for heart, spade, diamond, or club
-	 */
+    /**
+     * String of all instance variables, no newline character at end of String.
+     * Using print value to use as "condensed" version of printed card (ex: A ♥)
+     *
+     * @return String containing (print) value and suit, separated by a space
+     */
+    public String toString() {
+        return getPrintValue() + " " + suit;
+    }
 
+    /**
+     * Checking for equality of Card objects, all instance variables exactly equal
+     * to each other (case-sensitive). Argument object not changed
+     *
+     * @param other Card object to compare for equality
+     * @return boolean representing equality between both objects, all data is
+     *         exactly equal to each other
+     */
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof Card)) return false;
+        Card otherCard = (Card) other;
+        return this.value == otherCard.value && this.suit == otherCard.suit;
+    }
 
-	/**
-	 * Access numerical value of card (1-13)
-	 *
-	 * @return value as raw integer 1-13 (not what player sees as A, 2-10, J, Q, K;
-	 *         see {@link #getPrintValue()})
-	 */
+    /*** EXTRA METHODS ***/
 
-
-	/**
-	 * Access value of card as seen by user (A, 2-10, J, Q, K) that would be printed
-	 * on card
-	 *
-	 * @return value as String user sees on card (A, 2-10, J, Q, K), not numerical
-	 *         value 1-13 (see {@link #getValue()})
-	 */
-
-
-	/**
-	 * Access ASCII art version of card data, each line separated by newline
-	 * character, no newline character at end of String
-	 *
-	 * @return String containing ASCII art with card suit and card print value
-	 */
-
-
-	/*** OTHER REQUIRED METHODS ***/
-	/**
-	 * String of all instance variables, no newline character at end of String.
-	 * Using print value to use as "condensed" version of printed card (ex: A ♥)
-	 * 
-	 * @return String containing (print) value and suit, separated by a space
-	 */
-
-
-	/**
-	 * Checking for equality of Card objects, all instance variables exactly equal
-	 * to each other (case-sensitive). Argument object not changed
-	 * 
-	 * @param other Card object to compare for equality
-	 * 
-	 * @return boolean representing equality between both objects, all data is
-	 *         exactly equal to each other
-	 */
-
-
-	/*** EXTRA METHODS ***/
-	/**
-	 * Prints card ASCII art to console (see {@link #getPrintCard()})
-	 */
-
-
-
+    /**
+     * Prints card ASCII art to console (see {@link #getPrintCard()})
+     */
+    public void printCard() {
+        System.out.println(getPrintCard());
+    }
 }
